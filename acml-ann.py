@@ -11,24 +11,18 @@ w1 = np.random.rand(m2, m1) #3x8
 b2 = np.random.rand(m3, 1) #8x1
 w2 = np.random.rand(m3, m2) #8x3
 
-dB1 = np.zeros((3,1)) #3x1
-dW1 = np.zeros((3,8)) #3x8
-
-dB2 = np.zeros((8,1)) #8x1
-dW2 = np.zeros((8,3)) #8x3
-
 alpha = 0.5
-lambdaDecay = 0.15
+lambdaDecay = 0.3
 
 def generateInputMatrix(num):
     base = np.array([1,0,0,0,0,0,0,0])
     return (np.array([np.roll(base, i).T for i in range(num)])).T
 
 def calculateDeltaOut(y, a):
-    return (y-a)
+    return (a-y)
 
 def calculateDelta(w, delta, z):
-    #with arrays, use dot for matrix multiplication
+    #with arrays, use dot for matrix and multiply for element-wise multiplication
     return np.array((np.multiply(np.dot(w.T,delta),derive(z))), dtype=np.float64)
 
 def derive(a):
@@ -37,21 +31,32 @@ def derive(a):
 
 def updateBias(b, dB):
     global alpha, m
-    return b - alpha*((1/m) * dB)
+    return b - alpha*(dB/m)
 
 def updateWeight(w, dW):
     global alpha, m, lambdaDecay
-    return w - alpha*(((1/m) * dW) + (lambdaDecay * w))
+    return w - alpha*((dW/m) + (lambdaDecay * w))
 
+print("Enter the number of samples to use (min 4): ")
 #number of samples: change as necessary
-m = 5
+m = int(input())
 
-xAll = generateInputMatrix(10) #8xm
+if m !isinstance(int) or m < 4:
+    print("Input is invalid. Using m = 4...")
+    m = 4
+
+xAll = generateInputMatrix(m) #8xm
     
 run = True
 loopCount = 0
 
 while run:
+    #set big deltas to zero
+    dB1 = np.zeros((3,1)) #3x1
+    dW1 = np.zeros((3,8)) #3x8
+    dB2 = np.zeros((8,1)) #8x1
+    dW2 = np.zeros((8,3)) #8x3
+        
     yAll = np.array([])
     #for each of the training examples
     for x in xAll.T:
@@ -96,14 +101,17 @@ while run:
 
     #check the difference between actual and expected output
     #if all entries are zeros or limit reached: stop loop
-    if not delta3.any() or loopCount == 10000: 
+    if not delta3.any() or loopCount == 100000: 
        run = False 
        break
     loopCount += 1
 
-    
+    if(loopCount % 10000 == 0):
+        print("At loop "+str(loopCount))
+        print("Input matrix: ")
+        print(xAll)
+        print("Output matrix: ")
+        print(yAll)
 
-print(xAll)
-print(yAll)
-print(loopCount)
-
+        
+print("Reached "+str(loopCount)+" iterations.")
