@@ -12,7 +12,7 @@ b2 = np.random.rand(m3, 1) #8x1
 w2 = np.random.rand(m3, m2) #8x3
 
 alpha = 0.8
-lambdaDecay = 0.7
+lambdaDecay = 0.1
 
 def generateInputMatrix(num):
     base = np.array([1,0,0,0,0,0,0,0])
@@ -44,13 +44,21 @@ def printMatrices():
     print(w2)
     
 
-print("Enter the number of samples to use (minimum is 4): ")
 #number of samples: change as necessary
-m = int(input())
-
-if not isinstance(m, int) or m < 4:
+m = input("Enter the number of samples to use (minimum is 4): ")
+if m == "" or int(m) < 4:
     print("Input is invalid. Using m = 4...")
     m = 4
+
+alpha = input("Set Alpha (default 0.8): ")
+if alpha == "" or int(alpha) <= 0 or int(alpha) >= 1:
+    print("Using default Alpha = 0.8")
+    alpha = 0.8
+
+lambdaDecay = input("Set Lambda (default 0.1): ")
+if lambdaDecay == "" or int(lambdaDecay) <= 0 or int(lambdaDecay) >= 1:
+    print("Using default Lambda = 0.1")
+    lambdaDecay = 0.1
 
 xAll = generateInputMatrix(m) #8xm
     
