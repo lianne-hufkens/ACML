@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.special import expit #aka sigmoid function
 
+#Made by Lianne Hufkens i6170386 and Tahmina Begum i6185670
+
 m1 = 8 #+1 bias
 m2 = 3 #+1 bias
 m3 = 8
@@ -44,7 +46,7 @@ def printMatrices():
     print(w2)
 
     
-#number of samples: change as necessary
+#number of samples
 m = input("Enter the number of samples to use (minimum is 4): ")
 if m == "" or int(m) < 4:
     print("Input is invalid. Using m = 4...")
