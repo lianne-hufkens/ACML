@@ -11,8 +11,8 @@ w1 = np.random.rand(m2, m1) #3x8
 b2 = np.random.rand(m3, 1) #8x1
 w2 = np.random.rand(m3, m2) #8x3
 
-alpha = 0.5
-lambdaDecay = 0.3
+alpha = 0.8
+lambdaDecay = 0.7
 
 def generateInputMatrix(num):
     base = np.array([1,0,0,0,0,0,0,0])
@@ -37,11 +37,18 @@ def updateWeight(w, dW):
     global alpha, m, lambdaDecay
     return w - alpha*((dW/m) + (lambdaDecay * w))
 
-print("Enter the number of samples to use (min 4): ")
+def printMatrices():
+    global b1, w1, b2, w2
+    print("Weights:")
+    print(w1)
+    print(w2)
+    
+
+print("Enter the number of samples to use (minimum is 4): ")
 #number of samples: change as necessary
 m = int(input())
 
-if m !isinstance(int) or m < 4:
+if not isinstance(m, int) or m < 4:
     print("Input is invalid. Using m = 4...")
     m = 4
 
@@ -49,6 +56,8 @@ xAll = generateInputMatrix(m) #8xm
     
 run = True
 loopCount = 0
+
+printMatrices()
 
 while run:
     #set big deltas to zero
@@ -99,19 +108,23 @@ while run:
     b1 = updateBias(b1, dB1) #3x1
     w1 = updateWeight(w1, dW1) #3x8
 
+    loopCount += 1
+
     #check the difference between actual and expected output
     #if all entries are zeros or limit reached: stop loop
     if not delta3.any() or loopCount == 100000: 
        run = False 
        break
-    loopCount += 1
 
     if(loopCount % 10000 == 0):
-        print("At loop "+str(loopCount))
+        print("At loop "+str(loopCount)+" the error rate is "+str(np.mean(np.abs(delta3))))
         print("Input matrix: ")
         print(xAll)
         print("Output matrix: ")
         print(yAll)
+        print("Weights: ")
+        print(w1)
+        print(w2)
 
         
 print("Reached "+str(loopCount)+" iterations.")
