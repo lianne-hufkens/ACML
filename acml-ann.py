@@ -42,8 +42,8 @@ def printMatrices():
     print("Weights:")
     print(w1)
     print(w2)
-    
 
+    
 #number of samples: change as necessary
 m = input("Enter the number of samples to use (minimum is 4): ")
 if m == "" or int(m) < 4:
@@ -52,16 +52,16 @@ if m == "" or int(m) < 4:
 m = int(m)
 
 alpha = input("Set Alpha (default 0.8): ")
-if alpha == "" or int(alpha) <= 0 or int(alpha) >= 1:
+if alpha == "" or float(alpha) <= 0 or float(alpha) >= 1:
     print("Using default Alpha = 0.8")
     alpha = 0.8
-alpha = int(alpha)
+alpha = float(alpha)
 
 lambdaDecay = input("Set Lambda (default 0.1): ")
-if lambdaDecay == "" or int(lambdaDecay) <= 0 or int(lambdaDecay) >= 1:
+if lambdaDecay == "" or float(lambdaDecay) <= 0 or float(lambdaDecay) >= 1:
     print("Using default Lambda = 0.1")
     lambdaDecay = 0.1
-lambdaDecay = int(lambdaDecay)
+lambdaDecay = float(lambdaDecay)
 
 xAll = generateInputMatrix(m) #8xm
     
@@ -134,7 +134,5 @@ while run:
         print("Output matrix: ")
         print(yAll)
         printMatrices()
-
-
         
 print("Reached "+str(loopCount)+" iterations.")
